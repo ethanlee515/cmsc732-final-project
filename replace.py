@@ -2,7 +2,7 @@
 
 import spacy
 import json
-# from nltk.corpus import wordnet as wn
+from nltk.corpus import wordnet as wn
 
 spacy_nlp = spacy.load("en_core_web_md")
 
@@ -11,10 +11,14 @@ with open(ppdb_path, "r", encoding="utf-8") as f:
     ppdb_synonyms = json.load(f)
 
 def get_synonyms(word):
-    synonyms = list()
+    synonyms = set()
     if word in ppdb_synonyms:
-        synonyms.extend(ppdb_synonyms[word])
-    # TODO Can use wordnet here too
+        for synonym in ppdb_synonyms[word]:
+            synonyms.add(synonym)
+    for synset in wn.synsets(word):
+        for lemma in synset.lemma_names():
+            if lemma != word:
+                synonyms.add(lemma)
     return synonyms
 
 def is_edit_candidate(token):
