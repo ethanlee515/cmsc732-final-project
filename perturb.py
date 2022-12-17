@@ -75,8 +75,9 @@ if __name__ == "__main__":
             "context": row["context"],
             "question": perturbed,
             "answers": {
-                "answer_start": [answer_start],
-                "text": [answer]
+                # Keeping all answers for correctness
+                "answer_start": row['answers']['answer_start'],
+                "text": row['answers']['text']
             }
         })
     print(f"no keywords count = {no_keyword_count}")

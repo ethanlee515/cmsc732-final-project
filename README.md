@@ -8,5 +8,5 @@ Group project between 3 grad students
 
 Perturbed SQuAD validation set can be found in "perturbed.json". Output stats:
 * no keywords found: 1965
-* Keyword found, but no synonyms found: 790
-* Successful perturbs = 7815
+* Keyword found, but no synonyms found: 784
+* Successful perturbs = 7821
