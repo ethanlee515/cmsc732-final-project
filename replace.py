@@ -17,7 +17,7 @@ def get_synonyms(word):
             synonyms.add(synonym)
     for synset in wn.synsets(word):
         for lemma in synset.lemma_names():
-            if lemma != word:
+            if lemma != word and '_' not in lemma:
                 synonyms.add(lemma)
     return synonyms
 
