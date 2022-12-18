@@ -67,18 +67,12 @@ if __name__ == "__main__":
             continue
         synonym = random.choice(list(synonyms))
         perturbed = row['question'].replace(keyword, synonym)
-        # print(f"row {i}: original question = {row['question']}")
-        # print(f"row {i}: perturbed question = {perturbed}")
         output_rows.append({
             "title": row["title"],
             "id": row["id"],
             "context": row["context"],
             "question": perturbed,
-            "answers": {
-                # Keeping all answers for correctness
-                "answer_start": row['answers']['answer_start'],
-                "text": row['answers']['text']
-            }
+            "answers": row['answers']
         })
     print(f"no keywords count = {no_keyword_count}")
     print(f"no synonyms count = {no_synonym_count}")
