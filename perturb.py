@@ -42,7 +42,8 @@ def get_overlaps(question, gold_sentence, answer):
     
 if __name__ == "__main__":
     squad = datasets.load_dataset('squad')
-    squad = squad['validation']
+    # Change this between train/validation
+    squad = squad['train']
     no_keyword_count = 0
     no_synonym_count = 0
     output_rows = list()
@@ -77,5 +78,5 @@ if __name__ == "__main__":
     print(f"no keywords count = {no_keyword_count}")
     print(f"no synonyms count = {no_synonym_count}")
     print(f"successful perturbs = {len(output_rows)}")
-    with open('perturbed.json', 'w') as output_file:
+    with open('perturbed-train.json', 'w') as output_file:
         json.dump({"data": output_rows}, output_file)
