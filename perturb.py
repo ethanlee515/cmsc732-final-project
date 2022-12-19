@@ -7,6 +7,7 @@ import spacy
 import replace
 import random
 import json
+from collections import defaultdict
 
 spacy_tokenizer = spacy.load("en_core_web_md")
 
@@ -44,9 +45,12 @@ if __name__ == "__main__":
     squad = datasets.load_dataset('squad')
     # Change this between train/validation
     squad = squad['train']
-    no_keyword_count = 0
     no_synonym_count = 0
     output_rows = list()
+
+    keyword_counts = defaultdict(int)
+    synonym_counts = defaultdict(int)
+
     for i in range(len(squad)):
         row = squad[i]
         # TODO multiple answers
@@ -56,14 +60,15 @@ if __name__ == "__main__":
         gold_sentence = get_gold_sentence(row['context'], answer_start)
 
         overlaps = get_overlaps(row['question'], gold_sentence, answer)
+        keyword_counts[len(overlaps)] += 1
         if len(overlaps) == 0:
-            no_keyword_count += 1
             # print(f"row {i}: no keyword found")
             continue
         keyword = random.choice(list(overlaps))
+
         synonyms = replace.get_synonyms(keyword)
+        synonym_counts[len(synonyms)] += 1
         if len(synonyms) == 0:
-            no_synonym_count += 1
             # print(f'row {i}: no synonyms found for "{keyword}"')
             continue
         synonym = random.choice(list(synonyms))
@@ -75,8 +80,9 @@ if __name__ == "__main__":
             "question": perturbed,
             "answers": row['answers']
         })
-    print(f"no keywords count = {no_keyword_count}")
-    print(f"no synonyms count = {no_synonym_count}")
+    print(f"number of rows = {len(squad)}")
+    print(f"keyword counts = {keyword_counts}")
+    print(f"synonym counts = {synonym_counts}")
     print(f"successful perturbs = {len(output_rows)}")
     with open('perturbed-train.json', 'w') as output_file:
         json.dump({"data": output_rows}, output_file)
